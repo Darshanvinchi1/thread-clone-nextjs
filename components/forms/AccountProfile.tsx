@@ -20,7 +20,7 @@ import { ChangeEvent, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from '@/lib/uploadthing'
-import { updatedUser } from "@/lib/actions/user.actions";
+import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
@@ -87,7 +87,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       }
     }
 
-    await updatedUser({
+    await updateUser({
      userId : user?.id,
      username : values.username,
      name : values.name,

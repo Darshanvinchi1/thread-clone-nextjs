@@ -10,7 +10,7 @@ const Page = async ({ params }: {params: { id: string }}) => {
     if(!params.id) return null;
     const user = await currentUser();
 
-    const userInfo = await fetchUser(user?.id);
+    const userInfo = await fetchUser(user?.id || "");
 
     if(!userInfo?.onboarded) redirect('/onboarding')
 
@@ -22,13 +22,13 @@ const Page = async ({ params }: {params: { id: string }}) => {
             <ThreadCard
                 key={thread._id}
                 id={thread._id}
-                currentUserId={user?.id}
+                currentUserId={user?.id || ""}
                 parendId={thread.parentId}
                 content={thread.text}
                 auther={thread.auther}
                 community={thread.community}
                 createdAt={thread.createdAt}
-                comments={thread.childer}
+                comments={thread.children}
             />
         </div>
 
