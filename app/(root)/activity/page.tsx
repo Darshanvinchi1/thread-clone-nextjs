@@ -1,3 +1,4 @@
+import NoData from '@/components/shared/NoData';
 import { fetchUser, getActivity } from '@/lib/actions/user.actions';
 import { currentUser } from '@clerk/nextjs';
 import Image from 'next/image';
@@ -8,12 +9,12 @@ const Page = async () => {
 
     const user = await currentUser();
 
-    const userInfo = await fetchUser(user?.id);
+    const userInfo = await fetchUser(user?.id || "");
 
     if(!userInfo?.onboarded) redirect('/onboarding')
 
-    const activity = await getActivity(userInfo._id);
-
+    // const activity = await getActivity(userInfo._id);
+    let  activity: any[] = [];
   return (
     <section>
         <h1 className="head-text mb-10">Activity</h1>
@@ -41,7 +42,10 @@ const Page = async () => {
                   </Link>
                 ))}
               </>
-            ) : <p className='!text-base-regular text-light-3'>No activity yet</p>}
+            ) : (
+              <NoData title='No activity yet' />
+            // <p className='!text-base-regular text-light-3'>No activity yet</p>
+            )}
         </section>
     </section>
   )

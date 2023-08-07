@@ -7,6 +7,7 @@ import CommunityCard from "@/components/cards/CommunityCard";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 import { fetchCommunities } from "@/lib/actions/community.actions";
+import NoResult from "@/components/shared/NoResult";
 
 async function Page({
   searchParams,
@@ -35,7 +36,10 @@ async function Page({
 
       <section className='mt-9 flex flex-wrap gap-4'>
         {result.communities.length === 0 ? (
-          <p className='no-result'>No Result</p>
+          <>
+            {/* <p className='no-result'>No Result</p> */}
+            <NoResult />
+          </>
         ) : (
           <>
             {result.communities.map((community) => (
