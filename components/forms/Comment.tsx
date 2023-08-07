@@ -18,6 +18,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { CommentValidation } from "@/lib/validations/thread";
 import Image from "next/image";
 import { addCommentToThread } from "@/lib/actions/thread.action";
+import { Loader2 } from "lucide-react"
+import { useState } from "react";
 
 // import { createThread } from "@/lib/actions/thread.action";
 
@@ -33,7 +35,7 @@ const Comment = ({
     currentUserImg,
     currentUserId,
 }: Props) => {
-
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -45,9 +47,11 @@ const Comment = ({
   });
   
   const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
+    setLoading(true);
     await addCommentToThread(threadId, values.thread, JSON.parse(currentUserId), pathname);
 
     form.reset();
+    setLoading(false);
   }
 
   return (
@@ -79,7 +83,8 @@ const Comment = ({
             </FormItem>
           )}
         />
-        <Button type="submit" className="comment-form_btn">
+        <Button type="submit" disabled={loading} className="comment-form_btn">
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Reply
         </Button>
         </form>

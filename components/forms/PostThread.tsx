@@ -18,7 +18,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { ThreadValidation } from "@/lib/validations/thread";
 import { createThread } from "@/lib/actions/thread.action";
 import { useOrganization } from "@clerk/nextjs";
-
+import { Loader2 } from "lucide-react"
+import { useState } from "react";
 // import { updatedUser } from "@/lib/actions/user.actions";
 
 interface Props {
@@ -38,6 +39,7 @@ const PostThread = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { organization } = useOrganization();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(ThreadValidation),
@@ -48,6 +50,7 @@ const PostThread = ({ userId }: { userId: string }) => {
   });
   
   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+    setLoading(true);
     await createThread({
         text: values.thread,
         auther: userId,
@@ -56,6 +59,7 @@ const PostThread = ({ userId }: { userId: string }) => {
     });
 
     router.push('/')
+    setLoading(false);
   }
   
     return (
@@ -79,7 +83,8 @@ const PostThread = ({ userId }: { userId: string }) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary-500">
+        <Button type="submit" disabled={loading}  className="bg-primary-500">
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Post Thread
         </Button>
         </form>
