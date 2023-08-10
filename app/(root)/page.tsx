@@ -22,8 +22,6 @@ export default async function Home({
     30
   );
 
-
-
   return (
     <>
       <h1 className="head-text text-left">Home</h1>
@@ -45,6 +43,7 @@ export default async function Home({
                   community={post.community}
                   createdAt={post.createdAt}
                   comments={post.children}
+                  reThread={post.repostedFrom}
                 />
               ))}
             </>

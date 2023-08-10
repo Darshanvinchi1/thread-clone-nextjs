@@ -43,6 +43,7 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: Props) => {
 					community={thread.community} // todo
 					createdAt={thread.createdAt}
 					comments={thread.children}
+					reThread={thread.repostedFrom}
 				/>
 			))}
 		</section>

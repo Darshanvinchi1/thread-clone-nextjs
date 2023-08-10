@@ -34,6 +34,14 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
         model: User,
         select: "_id name parentId image", // Select only _id and username fields of the auther
       },
+    })
+    .populate({
+      path: "repostedFrom",
+      populate: {
+        path: "repostedBy",
+        model: User,
+        select: "_id username id"
+      }
     });
 
   // Count the total number of top-level posts (threads) i.e., threads that are not comments.
@@ -87,6 +95,42 @@ export async function createThread({ text, auther, communityId, path }: Params) 
   } catch (error: any) {
     throw new Error(`Failed to create thread: ${error.message}`);
   }
+}
+
+
+export async function repostThread(userId: string, threadId: string,pathname: string) {
+  try{
+    connectToDB();
+    // const user = await User.findById(userId);
+    const user = await User.findOne({ id: userId });
+    const thread = await Thread.findById(threadId);
+
+    if (!user || !thread) {
+        throw new Error('User or thread not found.');
+    }
+
+    
+    const repostThread =  await Thread.create({
+      text: thread.text,
+      auther: thread.auther,
+      parentId: thread.parentId,
+      community: thread.community,
+      children: thread.children,
+      repostedFrom: {
+        thread: thread._id,
+        repostedBy: user._id
+      }
+    })
+
+    await User.findOneAndUpdate({ id: userId },{
+      $push: { threads: repostThread._id },
+    });
+
+    revalidatePath(pathname);
+    }
+    catch (error: any){
+      throw new Error(`Respost Error ${error.message}`)
+    }
 }
 
 async function fetchAllChildThreads(threadId: string): Promise<any[]> {

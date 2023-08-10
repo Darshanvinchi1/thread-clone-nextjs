@@ -18,6 +18,18 @@ const threadSchema = new mongoose.Schema({
     parentId:{
         type: String,
     },
+    repostedFrom: [
+        {
+            thread: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Thread',
+            },
+            repostedBy: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        }
+    ],
     children: [
         {
             type: mongoose.Schema.Types.ObjectId,

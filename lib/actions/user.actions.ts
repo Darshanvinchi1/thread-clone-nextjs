@@ -82,6 +82,14 @@ export async function fetchUserPosts(userId: string) {
             select: "name image id", // Select the "name" and "_id" fields from the "User" model
           },
         },
+        {
+          path: "repostedFrom",
+          populate: {
+            path: "repostedBy",
+            model: User,
+            select: "_id username id"
+          }
+        }
       ],
     });
     return threads;
