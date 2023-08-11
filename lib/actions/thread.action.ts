@@ -101,11 +101,10 @@ export async function createThread({ text, auther, communityId, path }: Params) 
 export async function repostThread(userId: string, threadId: string,pathname: string) {
   try{
     connectToDB();
-    console.log(userId,"userID")
     // const user = await User.findById(userId);
     const user = await User.findOne({ id: userId });
     const thread = await Thread.findById(threadId);
-    console.log(user,thread)
+
     if (!user || !thread) {
         throw new Error('User or thread not found.');
     }
