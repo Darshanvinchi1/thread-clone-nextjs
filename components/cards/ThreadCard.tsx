@@ -112,7 +112,7 @@ function ThreadCard({
 										className='cursor-pointer object-contain'
 									/>
 								</Link>
-								<RepostThread userId={currentUserId} ThreadId={id} isRepoat={reThread[0]?.thread ? true: false} />
+								{!isComment &&  <RepostThread userId={currentUserId} ThreadId={id} isRepoat={reThread[0]?.thread ? true: false} />}
 								<Image
 									src='/assets/share.svg'
 									alt='heart'

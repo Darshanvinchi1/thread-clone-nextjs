@@ -101,10 +101,11 @@ export async function createThread({ text, auther, communityId, path }: Params) 
 export async function repostThread(userId: string, threadId: string,pathname: string) {
   try{
     connectToDB();
+    console.log(userId,"userID")
     // const user = await User.findById(userId);
     const user = await User.findOne({ id: userId });
     const thread = await Thread.findById(threadId);
-
+    console.log(user,thread)
     if (!user || !thread) {
         throw new Error('User or thread not found.');
     }
@@ -227,13 +228,34 @@ export async function fetchThreadById(threadId: string) {
           {
             path: "children", // Populate the children field within children
             model: Thread, // The model of the nested children (assuming it's the same "Thread" model)
-            populate: {
-              path: "auther", // Populate the auther field within nested children
-              model: User,
-              select: "_id id name parentId image", // Select only _id and username fields of the auther
-            },
+            populate: [
+              {
+                path: "auther", // Populate the auther field within nested children
+                model: User,
+                select: "_id id name parentId image", // Select only _id and username fields of the auther
+              },
+              {
+                path: "repostedFrom", // Populate the auther field within nested children
+                model: Thread,
+                populate: [
+                  {
+                    path: "repostedBy",
+                    model: User,
+                    select: "_id username id"
+                  }
+                ]
+              }
+            ]
           },
         ],
+      })
+      .populate({
+        path: "repostedFrom",
+        populate: {
+          path: "repostedBy",
+          model: User,
+          select: "_id username id"
+        }
       })
       .exec();
 

@@ -29,6 +29,7 @@ const Page = async ({ params }: {params: { id: string }}) => {
                 community={thread.community}
                 createdAt={thread.createdAt}
                 comments={thread.children}
+                reThread={thread.repostedFrom}
             />
         </div>
 
@@ -37,7 +38,6 @@ const Page = async ({ params }: {params: { id: string }}) => {
             threadId={thread.id}
             currentUserImg={userInfo.image}
             currentUserId={JSON.stringify(userInfo._id)}
-
           />
         </div>
 
@@ -54,6 +54,7 @@ const Page = async ({ params }: {params: { id: string }}) => {
                     community={childItem.community}
                     createdAt={childItem.createdAt}
                     comments={childItem.children}
+                    reThread={childItem.repostedFrom}
                     isComment
                 />
               ))
